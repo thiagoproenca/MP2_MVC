@@ -5,7 +5,9 @@ Usa padrão MVC com **Servlets, JSP e MySQL**, organizado em projeto **Maven**.
 
 ## Como rodar
 1. Instalar Maven.
-2. No terminal, dentro do projeto: `mvn tomcat7:run`
+2. No terminal, dentro do projeto:
+   1. `mvn clean package` 
+   2. `mvn tomcat7:run`
 3. Acessar no navegador: `http://localhost:8080/reservas`
 
 ## Estrutura básica
