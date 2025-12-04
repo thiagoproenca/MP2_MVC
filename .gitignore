@@ -1,26 +1,23 @@
-/.classpath
-/.project
-/target/
-.DS_Store
-/.settings/
-/bin/
-*.log# VSCode
+# Compilados Java
+*.class
+*.log
+
+# Diretórios criados pelo Maven
+target/
+
+# Pastas de build de IDEs
+bin/
+.settings/
+
+# Arquivos de configuração de IDEs
+.classpath
+.project
+.idea/
+*.iml
+
+# VSCode
 .vscode/
 
-# Java / Build
-bin/
-target/
-*.class
-
-# Maven / Gradle
-.mvn/
-.gradle/
-
-# Sistema
+# Arquivos temporários do sistema
 .DS_Store
 Thumbs.db
-
-# Servidor / IDEs
-.settings/
-.project
-.classpath
