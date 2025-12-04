@@ -10,13 +10,13 @@ Usa padrão MVC com **Servlets, JSP e MySQL**, organizado em projeto **Maven**.
 
 ## Estrutura básica
 src/main/java/com/restaurante/reservas/
-controllers/ -> Servlets
-dao/ -> Acesso ao banco
-model/ -> Classes do sistema
+- controllers/ -> Servlets
+- dao/ -> Acesso ao banco
+- model/ -> Classes do sistema
 
 src/main/webapp/
-pages/ -> JSPs
-WEB-INF/ -> web.xml
+- pages/ -> JSPs
+- WEB-INF/ -> web.xml
 
 ## Convenção simples
 - Servlets ficam em **controllers**
