@@ -1,5 +1,9 @@
-package main.java.com.restaurante.controller;
+package com.restaurante.controller;
 
-public class ReservaController {
-    
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+
+@WebServlet("/reservar")
+public class ReservaController extends HttpServlet {
+    // doPost() → processa reserva
 }
