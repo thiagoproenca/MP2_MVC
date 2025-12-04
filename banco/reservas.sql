@@ -1,0 +1,4 @@
+-- Criação das tabelas
+-- Tabela mesa
+-- Tabela reserva
+-- Inserts das mesas (8 mesas iniciais)
