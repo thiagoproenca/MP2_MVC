@@ -1,3 +1,5 @@
+package com.restaurante.dao;
+
 public class MesaDAO {
     // listarMesas()
     // buscarMesaPorId(int id)

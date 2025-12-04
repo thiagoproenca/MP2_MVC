@@ -1,4 +1,4 @@
-package main.java.com.restaurante.controller;
+package com.restaurante.controller;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
