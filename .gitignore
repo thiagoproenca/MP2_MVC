@@ -4,4 +4,23 @@
 .DS_Store
 /.settings/
 /bin/
-*.log
+*.log# VSCode
+.vscode/
+
+# Java / Build
+bin/
+target/
+*.class
+
+# Maven / Gradle
+.mvn/
+.gradle/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Servidor / IDEs
+.settings/
+.project
+.classpath
