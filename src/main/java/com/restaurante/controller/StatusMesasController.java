@@ -1,8 +1,8 @@
 package com.restaurante.controller;
 
 import java.io.IOException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 
 @WebServlet("/status-mesas")
 public class StatusMesasController extends HttpServlet {
