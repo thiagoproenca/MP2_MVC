@@ -1,8 +1,8 @@
 package com.restaurante.controller;
 
 import java.io.IOException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
 
 @WebServlet("/reservar")
 public class ReservaController extends HttpServlet {
