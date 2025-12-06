@@ -1,0 +1,14 @@
+CREATE TABLE mesas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numero_mesa INT NOT NULL UNIQUE,
+    qtd_lugares INT NOT NULL DEFAULT 4,
+    status ENUM('LIVRE', 'RESERVADA') NOT NULL DEFAULT 'LIVRE'
+);
+
+CREATE TABLE reservas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mesa_id INT NOT NULL,
+    nome_cliente VARCHAR(100) NOT NULL,
+    data_reserva TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_mesa_reserva FOREIGN KEY (mesa_id) REFERENCES mesas(id)
+);
