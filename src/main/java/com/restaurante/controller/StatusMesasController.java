@@ -1,9 +1,19 @@
 package com.restaurante.controller;
 
+import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 @WebServlet("/status-mesas")
 public class StatusMesasController extends HttpServlet {
-    // doGet() → retorna status atualizado das mesas
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+
+        // JSON mockado
+        String json = "[{\"mesa\": 1, \"ocupada\": false}, {\"mesa\": 2, \"ocupada\": true}]";
+
+        res.getWriter().write(json);
+    }
 }
