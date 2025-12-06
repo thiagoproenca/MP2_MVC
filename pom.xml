@@ -14,7 +14,14 @@
     </properties>
 
     <dependencies>
-        <!-- Jakarta Servlet API 6 (Tomcat 10.1) -->
+        <!-- Biblioteca para trabalhar com JSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+        <!-- API de Servlets usada pelo Tomcat (fornecida pelo servidor) -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -22,7 +29,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- MySQL Connector -->
+        <!-- Driver de conexão com MySQL -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -33,14 +40,14 @@
     <build>
         <plugins>
 
-            <!-- WAR plugin -->
+            <!-- Gera o arquivo .war do projeto -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
             </plugin>
 
-            <!-- Tomcat 10+ -->
+            <!-- Plugin para rodar o projeto no Tomcat 7 via Maven -->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
