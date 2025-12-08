@@ -1,13 +1,26 @@
 const app = new Vue({
     el: '#app',
+
     data: {
-        // dados serão adicionados pelo membro responsável
+        mesas: [],
+        ultimaAtualizacao: '-',
+        intervalo: null
     },
+
     methods: {
-        // loadStatus()
-        // atualizarAgora()
+        async loadStatus() {
+            const resp = await fetch("status-mesas");
+            this.mesas = await resp.json();
+            this.ultimaAtualizacao = new Date().toLocaleTimeString();
+        },
+
+        atualizarAgora() {
+            this.loadStatus();
+        }
     },
-    // created() {
-    //     // setInterval para atualizar automaticamente
-    // }
+
+    created() {
+        this.loadStatus();
+        this.intervalo = setInterval(() => this.loadStatus(), 1500);
+    }
 });
