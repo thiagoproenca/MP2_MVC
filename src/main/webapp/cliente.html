@@ -13,13 +13,90 @@
 
     <!-- Vue.js -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <style>
+        .card-table-occupied {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+
 </head>
 <body>
 
     <div id="app" class="container py-4">
-        <!-- Conteúdo será preenchido posteriormente pelo Membro 4 -->
-        <h1 class="mb-3">Mesas Disponíveis</h1>
+        <h1 class="mb-4 text-center">Mesas Disponíveis</h1>
+
         <!-- cards das mesas entrarão aqui -->
+        <div v-if="mensagem" :class="['alert', mensagem.tipo, 'alert-dismissible', 'fade', 'show']" role="alert">
+            {{ mensagem.texto }}
+            <button type="button" class="btn-close" @click="mensagem = null"></button>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col" v-for="mesa in mesas" :key="mesa.id">
+                <div 
+                    :class="['card', 'h-100', 'shadow-sm', {'card-table-occupied': mesa.status === 'Ocupada'}]"
+                >
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Mesa #{{ mesa.id }}</h5>
+                        <p class="card-text">
+                            Capacidade: **{{ mesa.capacidade }}** pessoas
+                        </p>
+                        <p class="card-text">
+                            Status: <span :class="{'fw-bold': true, 'text-success': mesa.status === 'Livre', 'text-danger': mesa.status === 'Ocupada'}">
+                                {{ mesa.status }}
+                            </span>
+                        </p>
+                        
+                        <div class="mt-auto pt-2">
+                            <button 
+                                v-if="mesa.status === 'Livre'"
+                                @click="abrirModal(mesa.id)" 
+                                class="btn btn-success w-100"
+                                :disabled="reservaEmAndamento"
+                            >
+                                Reservar Agora
+                            </button>
+                            <button 
+                                v-else-if="mesa.status === 'Ocupada'"
+                                @click="abrirModal(mesa.id)" 
+                                class="btn btn-warning w-100"
+                            >
+                                Ver Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="modalAberto" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Reservar Mesa #{{ modalReserva.mesaId }}</h5>
+                        <button type="button" class="btn-close" @click="fecharModal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Capacidade: **{{ modalReserva.capacidade }}** pessoas</p>
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Seu Nome:</label>
+                            <input type="text" class="form-control" id="nome" v-model="modalReserva.nomeCliente" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefone" class="form-label">Telefone:</label>
+                            <input type="text" class="form-control" id="telefone" v-model="modalReserva.telefoneCliente" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="fecharModal">Cancelar</button>
+                        <button type="button" class="btn btn-success" :disabled="!modalReserva.nomeCliente || !modalReserva.telefoneCliente || reservaEmAndamento" @click="confirmarEnvio">Confirmar Reserva</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Script do Vue específico da página do cliente -->
