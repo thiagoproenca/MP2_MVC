@@ -29,7 +29,7 @@
         <h1 class="mb-4 text-center">Mesas Disponíveis</h1>
 
         <!-- cards das mesas entrarão aqui -->
-        <div v-if="mensagem" :class="['alert', mensagem.tipo, 'alert-dismissible', 'fade', 'show']" role="alert">
+        <div v-if="mensagem" :class="['alert', mensagem.tipo, 'alert-dismissible']" role="alert">
             {{ mensagem.texto }}
             <button type="button" class="btn-close" @click="mensagem = null"></button>
         </div>
@@ -72,7 +72,7 @@
             </div>
         </div>
 
-        <div v-if="modalAberto" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);">
+        <div v-if="modalAberto" class="modal d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -81,6 +81,10 @@
                     </div>
                     <div class="modal-body">
                         <p>Capacidade: **{{ modalReserva.capacidade }}** pessoas</p>
+                        <div class="mb-3">
+                            <label for="login" class="form-label">Seu id de login:</label>
+                            <input type="text" class="form-control" id="login" v-model="modalReserva.idCliente" required>
+                        </div>
                         <div class="mb-3">
                             <label for="nome" class="form-label">Seu Nome:</label>
                             <input type="text" class="form-control" id="nome" v-model="modalReserva.nomeCliente" required>
