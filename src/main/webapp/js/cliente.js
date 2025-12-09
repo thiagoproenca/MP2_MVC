@@ -3,7 +3,8 @@ const app = new Vue({
     data: {
         mesas: [], 
         mensagem: null,
-        reservaEmAndamento: false, 
+        reservaEmAndamento: false,
+        modalAberto: false, 
         modalReserva: { 
             mesaId: null,
             idCliente: '',
@@ -54,6 +55,10 @@ const app = new Vue({
                  this.modalReserva.telefoneCliente = ''; 
                  
                  this.modalAberto = true;
+
+                 this.$nextTick(() => {
+                 console.log("Modal aberto no próximo ciclo de atualização do DOM.");
+                });
             } else if (mesa && mesa.status === 'Ocupada') {
                  this.exibirMensagem(`A Mesa #${mesaId} está ocupada e não pode ser reservada.`, 'alert-warning');
             }
