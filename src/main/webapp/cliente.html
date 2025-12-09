@@ -82,6 +82,10 @@
                     <div class="modal-body">
                         <p>Capacidade: **{{ modalReserva.capacidade }}** pessoas</p>
                         <div class="mb-3">
+                            <label for="login" class="form-label">Seu id de login:</label>
+                            <input type="text" class="form-control" id="login" v-model="modalReserva.idCliente" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="nome" class="form-label">Seu Nome:</label>
                             <input type="text" class="form-control" id="nome" v-model="modalReserva.nomeCliente" required>
                         </div>
