@@ -40,7 +40,7 @@
                     :class="['card', 'h-100', 'shadow-sm', {'card-table-occupied': mesa.status === 'Ocupada'}]"
                 >
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Mesa #{{ mesa.id }}</h5>
+                        <h5 class="card-title">Mesa #{{ mesa.numero }}</h5>
                         <p class="card-text">
                             Capacidade: **{{ mesa.capacidade }}** pessoas
                         </p>
@@ -51,21 +51,25 @@
                         </p>
                         
                         <div class="mt-auto pt-2">
-                            <button 
-                                v-if="mesa.status === 'Livre'"
-                                @click="abrirModal(mesa.id)" 
-                                class="btn btn-success w-100"
-                                :disabled="reservaEmAndamento"
-                            >
-                                Reservar Agora
-                            </button>
-                            <button 
-                                v-else-if="mesa.status === 'Ocupada'"
-                                @click="abrirModal(mesa.id)" 
-                                class="btn btn-warning w-100"
-                            >
-                                Ver Detalhes
-                            </button>
+
+                            <!-- BOTÃO PARA MESA LIVRE -->
+							<button 
+								v-if="mesa.status && mesa.status.toLowerCase() === 'livre'"
+								@click="abrirModal(mesa.numero)" 
+								class="btn btn-success w-100"
+								:disabled="reservaEmAndamento"
+							>
+								Reservar Agora
+							</button>
+
+							<!-- BOTÃO PARA MESA RESERVADA -->
+							<button 
+								v-else-if="mesa.status && mesa.status.toLowerCase() === 'reservada'"
+								@click="abrirModal(mesa.numero)" 
+								class="btn btn-warning w-100"
+							>
+								Ver Detalhes
+							</button>
                         </div>
                     </div>
                 </div>
@@ -76,7 +80,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Reservar Mesa #{{ modalReserva.mesaId }}</h5>
+                        <h5 class="modal-title">Reservar Mesa #{{ modalReserva.numero }}</h5>
                         <button type="button" class="btn-close" @click="fecharModal"></button>
                     </div>
                     <div class="modal-body">

@@ -7,8 +7,8 @@ package com.restaurante.model;
 public class Mesa {
 
     private int id;
-    private int numeroMesa;
-    private int qtdLugares;
+    private int numero;
+    private int capacidade;
     private String status; // LIVRE ou RESERVADA
 
     // Construtor padrão
@@ -16,10 +16,10 @@ public class Mesa {
     }
 
     // Construtor completo
-    public Mesa(int id, int numeroMesa, int qtdLugares, String status) {
+    public Mesa(int id, int numero, int capacidade, String status) {
         this.id = id;
-        this.numeroMesa = numeroMesa;
-        this.qtdLugares = qtdLugares;
+        this.numero = numero;
+        this.capacidade = capacidade;
         this.status = status;
     }
 
@@ -32,20 +32,20 @@ public class Mesa {
         this.id = id;
     }
 
-    public int getNumeroMesa() {
-        return numeroMesa;
+    public int getNumero() {
+        return numero;
     }
 
-    public void setNumeroMesa(int numeroMesa) {
-        this.numeroMesa = numeroMesa;
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
-    public int getQtdLugares() {
-        return qtdLugares;
+    public int getCapacidade() {
+        return capacidade;
     }
 
-    public void setQtdLugares(int qtdLugares) {
-        this.qtdLugares = qtdLugares;
+    public void setCapacidade(int capacidade) {
+        this.capacidade = capacidade;
     }
 
     public String getStatus() {
@@ -60,8 +60,8 @@ public class Mesa {
     public String toString() {
         return "Mesa{" +
                 "id=" + id +
-                ", numeroMesa=" + numeroMesa +
-                ", qtdLugares=" + qtdLugares +
+                ", numero=" + numero +
+                ", capacidade=" + capacidade +
                 ", status='" + status + '\'' +
                 '}';
     }

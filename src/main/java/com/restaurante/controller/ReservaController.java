@@ -1,5 +1,8 @@
 package com.restaurante.controller;
 
+import com.restaurante.dao.ReservaDAO;
+import com.restaurante.model.Reserva;
+
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -11,6 +14,11 @@ public class ReservaController extends HttpServlet {
 
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
+
+
+
+
+
 
         // TODO: Ler parâmetros reais e chamar DAO
         // Por enquanto, resposta simples para integração do front

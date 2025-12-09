@@ -6,7 +6,7 @@ const app = new Vue({
         reservaEmAndamento: false,
         modalAberto: false, 
         modalReserva: { 
-            mesaId: null,
+            numero: null,
             idCliente: '',
             nomeCliente: '',
             telefoneCliente: ''
@@ -16,39 +16,33 @@ const app = new Vue({
         this.loadMesas();
     },
     methods: {
-        loadMesas() {
-            this.mesas = [];
-            this.exibirMensagem('Carregando mesas...', 'alert-info');
-            
-            // *** PONTO DE INTEGRAÇÃO MVC: CHAMADA FETCH REAL (AJAX) ***
-            fetch('https://api.exemplo.com/dados')
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error(`Erro HTTP: ${res.status}`);
-                    }
-                    return res.json();
-                })
-                .then(data => { 
-                    this.mesas = data;
-                    this.exibirMensagem(`Mesas carregadas com sucesso! (${data.length} encontradas)`, 'alert-success');
-                })
-                .catch(err => {
-                    console.error('Erro ao carregar mesas:', err);
-                    // Dados de simulação (fallback) em caso de falha de conexão
-                    this.mesas = [
-                         { id: 1, capacidade: 4, status: 'Livre' },
-                         { id: 2, capacidade: 6, status: 'Ocupada' }, 
-                         { id: 3, capacidade: 2, status: 'Livre' },
-                    ];
-                    this.exibirMensagem(`❌ Erro de conexão. Mesas de demonstração carregadas.`, 'alert-danger');
-                });
-        },
+        async loadMesas() {
+			this.mesas = [];
+			this.exibirMensagem('Carregando mesas...', 'alert-info');
+
+			await fetch('http://localhost:8080/reservas/api/mesas')
+				.then(res => {
+					if (!res.ok) {
+						throw new Error(`Erro HTTP: ${res.status}`);
+					}
+					return res.json();
+				})
+				.then(data => {
+					this.mesas = data;   
+					this.exibirMensagem(`Mesas carregadas com sucesso! (${data.length} encontradas)`, 'alert-success');
+				})
+				.catch(err => {
+					console.error('Erro ao carregar mesas:', err);
+					this.mesas = [];
+					this.exibirMensagem(`❌ Erro de conexão com o servidor.`, 'alert-danger');
+				});
+		},
         
-        abrirModal(mesaId) {
-            const mesa = this.mesas.find(m => m.id === mesaId);
+        abrirModal(numero) {
+            const mesa = this.mesas.find(m => m.numero === numero);
             
-            if (mesa && mesa.status === 'Livre') {
-                 this.modalReserva.mesaId = mesaId;
+            if (mesa && mesa.status === 'LIVRE') {
+                 this.modalReserva.numero = numero;
                  this.modalReserva.capacidade = mesa.capacidade;
                  this.modalReserva.idCliente = '';
                  this.modalReserva.nomeCliente = ''; 
@@ -59,8 +53,8 @@ const app = new Vue({
                  this.$nextTick(() => {
                  console.log("Modal aberto no próximo ciclo de atualização do DOM.");
                 });
-            } else if (mesa && mesa.status === 'Ocupada') {
-                 this.exibirMensagem(`A Mesa #${mesaId} está ocupada e não pode ser reservada.`, 'alert-warning');
+            } else if (mesa && mesa.status === 'RESERVADA') {
+                 this.exibirMensagem(`A Mesa #${numero} está ocupada e não pode ser reservada.`, 'alert-warning');
             }
         },
 
@@ -69,19 +63,19 @@ const app = new Vue({
         },
 
         confirmarEnvio() {
-            this.enviarReserva(this.modalReserva.mesaId);
+            this.enviarReserva(this.modalReserva.numero);
             this.fecharModal();
         },
 
-        enviarReserva(mesaId) {
+        enviarReserva(numero) {
             this.reservaEmAndamento = true;
             this.mensagem = null;
 
-            console.log(`Enviando reserva para a mesa ${mesaId} via AJAX...`);
+            console.log(`Enviando reserva para a mesa ${numero} via AJAX...`);
             
             // Dados que serão enviados no corpo da requisição POST
             const dadosReserva = {
-                mesa_id: mesaId,
+                mesa_id: numero,
                 cliente_id: this.modalReserva.idCliente,
                 nome: this.modalReserva.nomeCliente, 
                 telefone: this.modalReserva.telefoneCliente
@@ -103,14 +97,14 @@ const app = new Vue({
             })
             .then(data => {
                 if (data && data.sucesso === true) {
-                    const mesaIndex = this.mesas.findIndex(m => m.id === mesaId);
+                    const mesaIndex = this.mesas.findIndex(m => m.numero === numero);
                     if (mesaIndex !== -1) {
                          this.$set(this.mesas, mesaIndex, {
                             ...this.mesas[mesaIndex],
-                            status: 'Ocupada' // Atualiza a View
+                            status: 'RESERVADA' // Atualiza a View
                         });
                     }
-                    this.exibirMensagem(`✅ Mesa #${mesaId} reservada com sucesso!`, 'alert-success');
+                    this.exibirMensagem(`✅ Mesa #${numero} reservada com sucesso!`, 'alert-success');
                 } else {
                     this.exibirMensagem(`❌ Falha na reserva: ${data.mensagem || 'Mesa indisponível ou erro desconhecido.'}`, 'alert-danger');
                 }

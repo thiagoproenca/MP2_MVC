@@ -27,8 +27,8 @@ public class MesaDAO {
             while (rs.next()) {
                 Mesa mesa = new Mesa();
                 mesa.setId(rs.getInt("id"));
-                mesa.setNumeroMesa(rs.getInt("numero_mesa"));
-                mesa.setQtdLugares(rs.getInt("qtd_lugares"));
+                mesa.setNumero(rs.getInt("numero_mesa"));
+                mesa.setCapacidade(rs.getInt("qtd_lugares"));
                 mesa.setStatus(rs.getString("status"));
                 mesas.add(mesa);
             }
@@ -55,8 +55,8 @@ public class MesaDAO {
                 if (rs.next()) {
                     Mesa mesa = new Mesa();
                     mesa.setId(rs.getInt("id"));
-                    mesa.setNumeroMesa(rs.getInt("numero_mesa"));
-                    mesa.setQtdLugares(rs.getInt("qtd_lugares"));
+                    mesa.setNumero(rs.getInt("numero_mesa"));
+                    mesa.setCapacidade(rs.getInt("qtd_lugares"));
                     mesa.setStatus(rs.getString("status"));
                     return mesa;
                 }
