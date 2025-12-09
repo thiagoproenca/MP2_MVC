@@ -28,7 +28,7 @@ public class ReservaDAO {
             // Insere a reserva
             try (PreparedStatement stmtInsert = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
                 stmtInsert.setInt(1, reserva.getMesaId());
-                stmtInsert.setString(2, reserva.getNomeCliente());
+                stmtInsert.setString(2, reserva.getNome());
                 stmtInsert.executeUpdate();
 
                 // Obtém o ID gerado
@@ -75,8 +75,8 @@ public class ReservaDAO {
                     Reserva reserva = new Reserva();
                     reserva.setId(rs.getInt("id"));
                     reserva.setMesaId(rs.getInt("mesa_id"));
-                    reserva.setNomeCliente(rs.getString("nome_cliente"));
-                    reserva.setDataReserva(rs.getTimestamp("data_reserva"));
+                    reserva.setNome(rs.getString("nome_cliente"));
+                    reserva.setData(rs.getTimestamp("data_reserva"));
                     reservas.add(reserva);
                 }
             }

@@ -52,20 +52,18 @@
                         
                         <div class="mt-auto pt-2">
 
-                            <!-- BOTÃO PARA MESA LIVRE -->
-							<button 
-								v-if="mesa.status && mesa.status.toLowerCase() === 'livre'"
-								@click="abrirModal(mesa.numero)" 
+                            <button 
+								v-if="mesa.status && mesa.status.toUpperCase() === 'LIVRE'"
+								@click="abrirModal(mesa.id)" 
 								class="btn btn-success w-100"
 								:disabled="reservaEmAndamento"
 							>
 								Reservar Agora
 							</button>
 
-							<!-- BOTÃO PARA MESA RESERVADA -->
 							<button 
-								v-else-if="mesa.status && mesa.status.toLowerCase() === 'reservada'"
-								@click="abrirModal(mesa.numero)" 
+								v-else-if="mesa.status && mesa.status.toUpperCase() === 'RESERVADA'"
+								@click="abrirModal(mesa.id)" 
 								class="btn btn-warning w-100"
 							>
 								Ver Detalhes
@@ -86,21 +84,13 @@
                     <div class="modal-body">
                         <p>Capacidade: **{{ modalReserva.capacidade }}** pessoas</p>
                         <div class="mb-3">
-                            <label for="login" class="form-label">Seu id de login:</label>
-                            <input type="text" class="form-control" id="login" v-model="modalReserva.idCliente" required>
-                        </div>
-                        <div class="mb-3">
                             <label for="nome" class="form-label">Seu Nome:</label>
                             <input type="text" class="form-control" id="nome" v-model="modalReserva.nomeCliente" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="telefone" class="form-label">Telefone:</label>
-                            <input type="text" class="form-control" id="telefone" v-model="modalReserva.telefoneCliente" required>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="fecharModal">Cancelar</button>
-                        <button type="button" class="btn btn-success" :disabled="!modalReserva.nomeCliente || !modalReserva.telefoneCliente || reservaEmAndamento" @click="confirmarEnvio">Confirmar Reserva</button>
+                        <button type="button" class="btn btn-success" :disabled="!modalReserva.nomeCliente || reservaEmAndamento" @click="confirmarEnvio">Confirmar Reserva</button>
                     </div>
                 </div>
             </div>

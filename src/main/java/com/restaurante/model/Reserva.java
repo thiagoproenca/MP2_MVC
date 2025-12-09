@@ -10,25 +10,25 @@ public class Reserva {
 
     private int id;
     private int mesaId;
-    private String nomeCliente;
-    private Timestamp dataReserva;
+    private String nome;
+    private Timestamp data;
 
     // Construtor padrão
     public Reserva() {
     }
 
     // Construtor completo
-    public Reserva(int id, int mesaId, String nomeCliente, Timestamp dataReserva) {
+    public Reserva(int id, int mesaId, String nome, Timestamp data) {
         this.id = id;
         this.mesaId = mesaId;
-        this.nomeCliente = nomeCliente;
-        this.dataReserva = dataReserva;
+        this.nome = nome;
+        this.data = data;
     }
 
     // Construtor sem ID (para inserção)
-    public Reserva(int mesaId, String nomeCliente) {
+    public Reserva(int mesaId, String nome) {
         this.mesaId = mesaId;
-        this.nomeCliente = nomeCliente;
+        this.nome = nome;
     }
 
     // Getters e Setters
@@ -48,20 +48,20 @@ public class Reserva {
         this.mesaId = mesaId;
     }
 
-    public String getNomeCliente() {
-        return nomeCliente;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeCliente(String nomeCliente) {
-        this.nomeCliente = nomeCliente;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public Timestamp getDataReserva() {
-        return dataReserva;
+    public Timestamp getData() {
+        return data;
     }
 
-    public void setDataReserva(Timestamp dataReserva) {
-        this.dataReserva = dataReserva;
+    public void setData(Timestamp data) {
+        this.data = data;
     }
 
     @Override
@@ -69,8 +69,8 @@ public class Reserva {
         return "Reserva{" +
                 "id=" + id +
                 ", mesaId=" + mesaId +
-                ", nomeCliente='" + nomeCliente + '\'' +
-                ", dataReserva=" + dataReserva +
+                ", nome='" + nome + '\'' +
+                ", data=" + data +
                 '}';
     }
 }

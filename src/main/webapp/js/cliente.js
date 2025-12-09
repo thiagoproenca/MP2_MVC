@@ -6,56 +6,49 @@ const app = new Vue({
         reservaEmAndamento: false,
         modalAberto: false, 
         modalReserva: { 
+            idMesa: null,
             numero: null,
-            idCliente: '',
-            nomeCliente: '',
-            telefoneCliente: ''
+            capacidade: null,
+            nomeCliente: ''
         }
     },
+
     mounted() {
         this.loadMesas();
     },
+
     methods: {
+
         async loadMesas() {
-			this.mesas = [];
-			this.exibirMensagem('Carregando mesas...', 'alert-info');
+            this.mesas = [];
+            this.exibirMensagem('Carregando mesas...', 'alert-info');
 
-			await fetch('http://localhost:8080/reservas/api/mesas')
-				.then(res => {
-					if (!res.ok) {
-						throw new Error(`Erro HTTP: ${res.status}`);
-					}
-					return res.json();
-				})
-				.then(data => {
-					this.mesas = data;   
-					this.exibirMensagem(`Mesas carregadas com sucesso! (${data.length} encontradas)`, 'alert-success');
-				})
-				.catch(err => {
-					console.error('Erro ao carregar mesas:', err);
-					this.mesas = [];
-					this.exibirMensagem(`❌ Erro de conexão com o servidor.`, 'alert-danger');
-				});
-		},
-        
-        abrirModal(numero) {
-            const mesa = this.mesas.find(m => m.numero === numero);
-            
-            if (mesa && mesa.status === 'LIVRE') {
-                 this.modalReserva.numero = numero;
-                 this.modalReserva.capacidade = mesa.capacidade;
-                 this.modalReserva.idCliente = '';
-                 this.modalReserva.nomeCliente = ''; 
-                 this.modalReserva.telefoneCliente = ''; 
-                 
-                 this.modalAberto = true;
-
-                 this.$nextTick(() => {
-                 console.log("Modal aberto no próximo ciclo de atualização do DOM.");
-                });
-            } else if (mesa && mesa.status === 'RESERVADA') {
-                 this.exibirMensagem(`A Mesa #${numero} está ocupada e não pode ser reservada.`, 'alert-warning');
+            try {
+                const res = await fetch('http://localhost:8080/reservas/api/mesas');
+                const data = await res.json();
+                this.mesas = data;
+                this.exibirMensagem(`Mesas carregadas (${data.length})`, 'alert-success');
+            } catch (err) {
+                this.exibirMensagem('❌ Erro carregando mesas.', 'alert-danger');
             }
+        },
+
+        abrirModal(idMesa) {
+            const mesa = this.mesas.find(m => m.id === idMesa);
+
+            if (!mesa) return;
+
+            if (mesa.status.toUpperCase() === "RESERVADA") {
+                this.exibirMensagem(`Mesa #${mesa.numero} já reservada.`, 'alert-warning');
+                return;
+            }
+
+            this.modalReserva.idMesa = mesa.id;
+            this.modalReserva.numero = mesa.numero;
+            this.modalReserva.capacidade = mesa.capacidade;
+            this.modalReserva.nomeCliente = "";
+
+            this.modalAberto = true;
         },
 
         fecharModal() {
@@ -63,69 +56,47 @@ const app = new Vue({
         },
 
         confirmarEnvio() {
-            this.enviarReserva(this.modalReserva.numero);
+            this.enviarReserva(this.modalReserva.idMesa);
             this.fecharModal();
         },
 
-        enviarReserva(numero) {
+        async enviarReserva(idMesa) {
             this.reservaEmAndamento = true;
             this.mensagem = null;
 
-            console.log(`Enviando reserva para a mesa ${numero} via AJAX...`);
-            
-            // Dados que serão enviados no corpo da requisição POST
-            const dadosReserva = {
-                mesa_id: numero,
-                cliente_id: this.modalReserva.idCliente,
-                nome: this.modalReserva.nomeCliente, 
-                telefone: this.modalReserva.telefoneCliente
+            const payload = {
+                mesaId: idMesa,
+                nome: this.modalReserva.nomeCliente
             };
 
-            fetch(API_URLS.ENVIAR_RESERVA, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json' 
-                    // espaço pra auth caso necessário
-                },
-                body: JSON.stringify(dadosReserva)
-            })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`Falha no servidor. Status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(data => {
-                if (data && data.sucesso === true) {
-                    const mesaIndex = this.mesas.findIndex(m => m.numero === numero);
-                    if (mesaIndex !== -1) {
-                         this.$set(this.mesas, mesaIndex, {
-                            ...this.mesas[mesaIndex],
-                            status: 'RESERVADA' // Atualiza a View
-                        });
+            try {
+                const resposta = await fetch("http://localhost:8080/reservas/api/reservar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await resposta.json();
+
+                if (data.sucesso) {
+                    const mesa = this.mesas.find(m => m.id === idMesa);
+                    if (mesa) {
+                        mesa.status = "RESERVADA";
                     }
-                    this.exibirMensagem(`✅ Mesa #${numero} reservada com sucesso!`, 'alert-success');
+                    this.exibirMensagem(`Mesa #${mesa.numero} reservada com sucesso!`, "alert-success");
                 } else {
-                    this.exibirMensagem(`❌ Falha na reserva: ${data.mensagem || 'Mesa indisponível ou erro desconhecido.'}`, 'alert-danger');
+                    this.exibirMensagem(data.mensagem, "alert-danger");
                 }
-            })
-            .catch(err => {
-                console.error('Erro de rede ou no processo de reserva:', err);
-                this.exibirMensagem('❌ Erro de comunicação ou falha no servidor. Tente novamente.', 'alert-danger');
-            })
-            .finally(() => { 
-                this.reservaEmAndamento = false;
-            });
+
+            } catch (err) {
+                this.exibirMensagem("Erro ao enviar reserva.", "alert-danger");
+            }
+
+            this.reservaEmAndamento = false;
         },
 
-        /**
-         * Função auxiliar para exibir e gerenciar mensagens de alerta na View.
-         * @param {string} texto O conteúdo da mensagem.
-         * @param {string} tipo A classe de alerta do Bootstrap (e.g., 'alert-success').
-         */
         exibirMensagem(texto, tipo) {
             this.mensagem = { texto, tipo };
-            // Auto-ocultar após 5 segundos
             setTimeout(() => {
                 if (this.mensagem && this.mensagem.texto === texto) {
                     this.mensagem = null;
