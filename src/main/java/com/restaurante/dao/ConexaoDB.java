@@ -11,9 +11,9 @@ import java.sql.SQLException;
 public class ConexaoDB {
 
     // Configurações de conexão com MySQL
-    private static final String URL = "jdbc:mysql://localhost:3306/restaurante_mvc?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String URL = "jdbc:mysql://localhost:3306/reserva_mesas";
     private static final String USUARIO = "root";
-    private static final String SENHA = "";
+    private static final String SENHA = "1234";
 
     private static Connection conexao = null;
 
